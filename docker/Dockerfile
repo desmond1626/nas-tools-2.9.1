@@ -38,4 +38,4 @@ RUN python_ver=$(python3 -V | awk '{print $2}') \
     && git config --global --add safe.directory ${WORKDIR}
 EXPOSE 3000
 VOLUME ["/config"]
-ENTRYPOINT ["/nas-tools/docker/entrypoint.sh"]
+ENTRYPOINT ["sh", "/nas-tools/docker/entrypoint.sh"]

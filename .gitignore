@@ -3,6 +3,7 @@ __pycache__
 *.log
 *.pid
 test.py
+test_data
 
 ### IntelliJ IDEA ###
 .idea
