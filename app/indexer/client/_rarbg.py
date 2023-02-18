@@ -16,7 +16,7 @@ class Rarbg:
 
     def init_config(self):
         session = requests.session()
-        self._req = RequestUtils(proxies=Config().get_proxies(), session=session, timeout=10)
+        self._req = RequestUtils(proxies=Config().get_proxies(), session=session, timeout=30)
         self.__get_token()
 
     def __get_token(self):
