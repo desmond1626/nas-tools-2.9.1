@@ -40,8 +40,7 @@ RUN python_ver=$(python3 -V | awk '{print $2}') \
     && apt-get -y install "${WORKDIR}/docker/chromedriver/google-chrome-stable_111.0.5563.64_amd64.deb" \
     && ln -s "${WORKDIR}/docker/chromedriver/chromedriver" /opt/google/chrome/chromedriver \
     && chmod 777 /nas-tools/docker/entrypoint.sh \
-    && ln -s /ms-playwright /root/.cache/ \
-    && chsh -s /bin/bash
+    && ln -s /ms-playwright /root/.cache/
 EXPOSE 3000
 VOLUME ["/config"]
-ENTRYPOINT ["sh", "/nas-tools/docker/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/nas-tools/docker/entrypoint.sh"]
