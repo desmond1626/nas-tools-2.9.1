@@ -28,10 +28,10 @@ ENV LANG="C.UTF-8" \
     PUID=0 \
     PGID=0 \
     UMASK=000 \
-    WORKDIR="/nas-tools"
+    WORKDIR="/nas-tools" \
+    python_ver=$(python3 -V | awk '{print $2}')
 WORKDIR ${WORKDIR}
-RUN python_ver=$(python3 -V | awk '{print $2}') \
-    && echo "${WORKDIR}/" > /usr/local/lib/python${python_ver%.*}/dist-packages/nas-tools.pth \
+RUN echo "${WORKDIR}/" > /usr/local/lib/python${python_ver%.*}/dist-packages/nas-tools.pth \
     && echo 'fs.inotify.max_user_watches=524288' >> /etc/sysctl.conf \
     && echo 'fs.inotify.max_user_instances=524288' >> /etc/sysctl.conf \
     && git config --global pull.ff only \
