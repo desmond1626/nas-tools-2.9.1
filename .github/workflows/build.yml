@@ -7,7 +7,6 @@ on:
     paths:
       - version.py
       - docker/Dockerfile
-      - docker/Dockerfile.lite
       - .github/workflows/build.yml
       - requirements.txt
 jobs:
