@@ -757,11 +757,11 @@ class Downloader:
                         episode_count = season.get("episode_count")
                         if not season_number or not episode_count:
                             continue
-                        # 检查Emby
+                        # 检查媒体库
                         no_exists_episodes = self.mediaserver.get_no_exists_episodes(meta_info,
                                                                                      season_number,
                                                                                      episode_count)
-                        # 没有配置Emby
+                        # 没有配置媒体库
                         if no_exists_episodes is None:
                             no_exists_episodes = self.filetransfer.get_no_exists_medias(meta_info,
                                                                                         season_number,

@@ -158,9 +158,12 @@ def search_medias_for_web(content, ident_flag=True, filters=None, tmdbid=None, m
     else:
         log.info("【Web】共检索到 %s 个有效资源" % len(media_list))
         # 插入数据库
-        media_list = sorted(media_list, key=lambda x: "%s%s%s" % (str(x.res_order).rjust(3, '0'),
-                                                                  str(x.site_order).rjust(3, '0'),
-                                                                  str(x.seeders).rjust(10, '0')), reverse=True)
+        media_list = sorted(media_list,
+                            key=lambda x: "%s%s%s%s%s" % (str(x.res_order).rjust(3, '0'),
+                                                          str(x.site_order).rjust(3, '0'),
+                                                          str(x.begin_season if x.begin_season else 0).rjust(3, '0'),
+                                                          str(x.begin_episode if x.begin_episode else 0).rjust(3, '0'),
+                                                          str(x.seeders).rjust(10, '0')), reverse=True)
         dbhepler.insert_search_results(media_items=media_list,
                                        ident_flag=ident_flag,
                                        title=content)

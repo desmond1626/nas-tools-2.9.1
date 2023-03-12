@@ -260,7 +260,8 @@ class WebAction:
             os.system(
                 "ps -ef | grep -v grep | grep 'python run.py'|awk '{print $2}'|xargs kill -9")
         else:
-            os.system("pm2 restart NAStool")
+            os.system(
+                "ps -ef | grep -v grep | grep 'python3 run.py'|awk '{print $2}'|xargs kill")
 
     @staticmethod
     def handle_message_job(msg, in_from=SearchType.OT, user_id=None, user_name=None):
@@ -1190,6 +1191,7 @@ class WebAction:
             os.system("git submodule update --init --recursive")
             # 安装依赖
             os.system('pip install -r /nas-tools/requirements.txt')
+            os.system("playwright install chromium --with-deps")
             # 重启
             self.restart_server()
         return {"code": 0}

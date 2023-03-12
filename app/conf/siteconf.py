@@ -544,5 +544,9 @@ class SiteConf:
         },
         'www.comicat.org': {
             "proxy": False
+        },
+        'www.boxmp4.com': {
+            "proxy": False,
+            "parser": "Boxmp4Spider"
         }
     }

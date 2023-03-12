@@ -5,6 +5,7 @@ import time
 import log
 from app.helper import IndexerHelper, IndexerConf, ProgressHelper, ChromeHelper
 from app.indexer.client._base import _IIndexClient
+from app.indexer.client._boxmp4_spider import Boxmp4Spider
 from app.indexer.client._rarbg import Rarbg
 from app.indexer.client._render_spider import RenderSpider
 from app.indexer.client._spider import TorrentSpider
@@ -158,6 +159,8 @@ class BuiltinIndexer(_IIndexClient):
                 result_array = RenderSpider().search(keyword=search_word,
                                                      indexer=indexer,
                                                      mtype=match_media.type if match_media else None)
+            elif indexer.parser == "Boxmp4Spider":
+                result_array = Boxmp4Spider().search(keyword=search_word, indexer=indexer)
             else:
                 result_array = self.__spider_search(keyword=search_word,
                                                     indexer=indexer,

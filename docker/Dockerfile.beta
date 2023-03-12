@@ -1,6 +1,7 @@
-FROM alpine
-RUN apk add --no-cache libffi-dev \
-    && apk add --no-cache $(echo $(wget --no-check-certificate -qO- https://raw.githubusercontent.com/desmond1626/nas-tools-2.9.1/dev/package_list.txt)) \
+FROM mcr.microsoft.com/playwright/python:v1.31.0-focal
+RUN apt-get update \
+    && apt-get -y install libffi-dev wget cron \
+    && apt-get -y install $(echo $(wget --no-check-certificate -qO- https://raw.githubusercontent.com/desmond1626/nas-tools-2.9.1/dev/package_list.txt)) \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo "${TZ}" > /etc/timezone \
     && ln -sf /usr/bin/python3 /usr/bin/python \
@@ -11,9 +12,9 @@ RUN apk add --no-cache libffi-dev \
     && pip install --upgrade pip setuptools wheel \
     && pip install cython \
     && pip install -r https://raw.githubusercontent.com/desmond1626/nas-tools-2.9.1/dev/requirements.txt \
-    && apk del libffi-dev \
-    && npm install pm2 -g \
-    && rm -rf /tmp/* /root/.cache /var/cache/apk/*
+    && apt-get --purge -y remove libffi-dev \
+    && playwright install chromium --with-deps  \
+    && rm -rf /tmp/* /root/.cache/* /var/cache/apt/*
 ENV LANG="C.UTF-8" \
     TZ="Asia/Shanghai" \
     NASTOOL_CONFIG="/config/config.yaml" \
@@ -30,12 +31,16 @@ ENV LANG="C.UTF-8" \
     WORKDIR="/nas-tools"
 WORKDIR ${WORKDIR}
 RUN python_ver=$(python3 -V | awk '{print $2}') \
-    && echo "${WORKDIR}/" > /usr/lib/python${python_ver%.*}/site-packages/nas-tools.pth \
+    && echo "${WORKDIR}/" > /usr/local/lib/python${python_ver%.*}/dist-packages/nas-tools.pth \
     && echo 'fs.inotify.max_user_watches=524288' >> /etc/sysctl.conf \
     && echo 'fs.inotify.max_user_instances=524288' >> /etc/sysctl.conf \
     && git config --global pull.ff only \
     && git clone -b dev ${REPO_URL} ${WORKDIR} --depth=1 --recurse-submodule \
-    && git config --global --add safe.directory ${WORKDIR}
+    && git config --global --add safe.directory ${WORKDIR} \
+    && apt-get -y install "${WORKDIR}/docker/chromedriver/google-chrome-stable_111.0.5563.64_amd64.deb" \
+    && ln -s "${WORKDIR}/docker/chromedriver/chromedriver" /opt/google/chrome/chromedriver \
+    && chmod 777 /nas-tools/docker/entrypoint.sh \
+    && ln -s /ms-playwright /root/.cache/
 EXPOSE 3000
 VOLUME ["/config"]
-ENTRYPOINT ["/nas-tools/docker/entrypoint.sh"]
+ENTRYPOINT ["sh", "/nas-tools/docker/entrypoint.sh"]

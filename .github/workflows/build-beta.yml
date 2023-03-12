@@ -6,7 +6,7 @@ on:
       - dev
     paths:
       - version.py
-      - docker/Dockerfile.beta
+      - docker/Dockerfile-beta
       - .github/workflows/build-beta.yml
       - requirements.txt
 jobs:
@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: docker/Dockerfile.beta
+          file: docker/Dockerfile-beta
           platforms: |
             linux/amd64
             linux/arm64

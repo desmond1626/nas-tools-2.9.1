@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 cd ${WORKDIR}
-if [ "${NASTOOL_AUTO_UPDATE}" = "true" ]; then
+if [ "${NASTOOL_AUTO_UPDATE}" == "true" ]; then
     if [ ! -s /tmp/requirements.txt.sha256sum ]; then
         sha256sum requirements.txt > /tmp/requirements.txt.sha256sum
     fi
@@ -88,13 +88,12 @@ fi
 echo "以PUID=${PUID}，PGID=${PGID}的身份启动程序..."
 
 if [ "${NASTOOL_VERSION}" = "lite" ]; then
-    mkdir -p /.pm2
-    chown -R "${PUID}":"${PGID}" "${WORKDIR}" /config /.pm2
+    chown -R "${PUID}":"${PGID}" "${WORKDIR}" /config
+    chown -R "${PUID}":"${PGID}" "${WORKDIR}" /config
 else
     mkdir -p /.local
-    mkdir -p /.pm2
-    chown -R "${PUID}":"${PGID}" "${WORKDIR}" /config /usr/lib/chromium /.local /.pm2
-    export PATH=${PATH}:/usr/lib/chromium
+    chown -R "${PUID}":"${PGID}" "${WORKDIR}" /config /opt/google/chrome /.local
+    export PATH=${PATH}:/opt/google/chrome
 fi
 umask "${UMASK}"
-exec su-exec "${PUID}":"${PGID}" "$(which dumb-init)" "$(which pm2-runtime)" start run.py -n NAStool --interpreter python3
+exec gosu "${PUID}":"${PGID}" python3 run.py
