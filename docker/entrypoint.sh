@@ -93,6 +93,7 @@ if [ "${NASTOOL_VERSION}" = "lite" ]; then
 else
     mkdir -p /.local
     chown -R "${PUID}":"${PGID}" "${WORKDIR}" /config /opt/google/chrome /.local
+    chmod 777 /opt/google/chrome/chromedriver
     export PATH=${PATH}:/opt/google/chrome
 fi
 umask "${UMASK}"
