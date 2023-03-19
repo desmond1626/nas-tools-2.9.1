@@ -3636,10 +3636,10 @@ class WebAction:
         # 提升整季的顺序到顶层
         def se_sort(k):
             b = re.sub(r" +|(?<=s\d)\D*?(?=e)|(?<=s\d\d)\D*?(?=e)",
-                       " ", k[0], flags=re.I).split()
+                       " ", k[0], flags=re.I).replace('S', '').replace('E', '').split()
             log.info(f"k: {b}")
-            log.info(f"k[0]: {b[0]}")
-            b[0] = b[0].replace('S', '')
+            # log.info(f"k[0]: {b[0]}")
+            # b[0] = b[0].replace('S', '')
             if len(b) > 1:
                 log.info(f"k[1]: {b[1]}")
                 b[1] = b[1].split('-')[0].replace('E', '')
