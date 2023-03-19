@@ -3637,8 +3637,8 @@ class WebAction:
         def se_sort(k):
             k = re.sub(r" +|(?<=s\d)\D*?(?=e)|(?<=s\d\d)\D*?(?=e)",
                        " ", k[0], flags=re.I).split()
-            k[0] = k[0].replace('S', '')
             log.info(f"k[0]: {k[0]}")
+            k[0] = k[0].replace('S', '')
             if len(k) > 1:
                 log.info(f"k[0]: {k[1]}")
                 k[1] = k[1].split('-')[0].replace('E', '')
