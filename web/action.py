@@ -3635,17 +3635,14 @@ class WebAction:
 
         # 提升整季的顺序到顶层
         def se_sort(k):
-            b = re.sub(r" +|(?<=s\d)\D*?(?=e)|(?<=s\d\d)\D*?(?=e)",
+            k = re.sub(r" +|(?<=s\d)\D*?(?=e)|(?<=s\d\d)\D*?(?=e)",
                        " ", k[0], flags=re.I).replace('S', '').replace('E', '').split()
-            log.info(f"k: {b}")
-            # log.info(f"k[0]: {b[0]}")
-            # b[0] = b[0].replace('S', '')
-            if len(b) > 1:
-                log.info(f"k[1]: {b[1]}")
-                b[1] = b[1].split('-')[0].replace('E', '')
+            log.info(f"k: {k}")
+            if len(k) > 1:
+                k[1] = k[1].split('-')[0].replace('E', '')
 
-            return (str(b[0] if b[0] else 1).rjust(3, '0') + str(b[1] if b[1] else 1).rjust(3, '0')) if len(
-                b) > 1 else ("Z" + b[0], "ZZZ")
+            return (str(k[0] if k[0] else 1).rjust(3, '0'), str(k[1] if k[1] else 1).rjust(3, '0')) \
+                if len(k) > 1 else ("Z" + k[0], "ZZZ")
 
         # 开始排序季集顺序
         for title, item in SearchResults.items():
