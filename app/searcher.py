@@ -146,7 +146,6 @@ class Searcher:
                 for x in media_list:
                     key_list.append(x.enclosure)
                 for x in second_media_list:
-                    log.info(x.enclosure)
                     if x.enclosure not in key_list:
                         media_list.append(x)
 
