@@ -3639,11 +3639,9 @@ class WebAction:
                        " ", k[0], flags=re.I).split()
             log.info(f"k: {k}")
             log.info(type(k))
-            log.info(type(k[0]))
             log.info(f"k[0]: {k[0]}")
             k[0] = k[0].replace('S', '')
             if len(k) > 1:
-                log.info(type(k[1]))
                 log.info(f"k[1]: {k[1]}")
                 k[1] = k[1].split('-')[0].replace('E', '')
             log.info(
