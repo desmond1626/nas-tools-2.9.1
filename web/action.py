@@ -3637,7 +3637,14 @@ class WebAction:
         def se_sort(k):
             k = re.sub(r" +|(?<=s\d)\D*?(?=e)|(?<=s\d\d)\D*?(?=e)",
                        " ", k[0], flags=re.I).split()
-            return (k[0], k[1]) if len(k) > 1 else ("Z" + k[0], "ZZZ")
+            k[0] = k[0].replace('S', '')
+            if len(k) > 1:
+                k[1] = k[1].replace('E', '')
+            log.info(
+                (str(k[0] if k[0] else 1).rjust(3, '0') + str(k[1] if k[1] else 1).rjust(3, '0')) if len(k) > 1 else (
+                "Z" + k[0], "ZZZ"))
+            return (str(k[0] if k[0] else 1).rjust(3, '0') + str(k[1] if k[1] else 1).rjust(3, '0')) if len(
+                k) > 1 else ("Z" + k[0], "ZZZ")
 
         # 开始排序季集顺序
         for title, item in SearchResults.items():

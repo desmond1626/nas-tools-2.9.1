@@ -46,8 +46,6 @@ class Boxmp4Spider(object):
                         "description": description,
                         "page_url": page_url,
                     })
-                    if len(items) >= 6:
-                        break
 
                 for item in items:
                     page.goto(indexer.domain + item["page_url"])

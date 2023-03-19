@@ -135,18 +135,23 @@ def search_medias_for_web(content, ident_flag=True, filters=None, tmdbid=None, m
                                           match_media=media_info,
                                           in_from=SearchType.WEB)
     # 使用第二名称重新搜索
-    if ident_flag \
-            and len(media_list) == 0 \
-            and second_search_name \
-            and second_search_name != first_search_name:
+    if ident_flag and second_search_name and second_search_name != first_search_name:
+        log.info("【Searcher】开始检索 %s ..." % second_search_name)
         search_process.start('search')
         search_process.update(ptype='search',
-                              text="%s 未检索到资源,尝试通过 %s 重新检索 ..." % (first_search_name, second_search_name))
-        log.info("【Searcher】%s 未检索到资源,尝试通过 %s 重新检索 ..." % (first_search_name, second_search_name))
-        media_list = Searcher().search_medias(key_word=second_search_name,
-                                              filter_args=filter_args,
-                                              match_media=media_info,
-                                              in_from=SearchType.WEB)
+                              text="开始检索 %s..." % second_search_name)
+        second_media_list = Searcher().search_medias(key_word=second_search_name,
+                                                     filter_args=filter_args,
+                                                     match_media=media_info,
+                                                     in_from=SearchType.WEB)
+        if len(second_media_list) != 0:
+            key_list = []
+            for x in media_list:
+                key_list.append(x.enclosure)
+            for x in second_media_list:
+                if x.enclosure not in key_list:
+                    media_list.append(x)
+
     # 清空缓存结果
     dbhepler = DbHelper()
     dbhepler.delete_all_search_torrents()
@@ -161,9 +166,10 @@ def search_medias_for_web(content, ident_flag=True, filters=None, tmdbid=None, m
         media_list = sorted(media_list,
                             key=lambda x: "%s%s%s%s%s" % (str(x.res_order).rjust(3, '0'),
                                                           str(x.site_order).rjust(3, '0'),
-                                                          str(x.begin_season if x.begin_season else 0).rjust(3, '0'),
-                                                          str(x.begin_episode if x.begin_episode else 0).rjust(3, '0'),
-                                                          str(x.seeders).rjust(10, '0')), reverse=True)
+                                                          9,
+                                                          str(x.begin_episode if x.begin_episode else 1).rjust(3, '0'),
+                                                          str(x.seeders if x.seeders and x.seeders != "-" else 0).rjust(
+                                                              10, '0')), reverse=True)
         dbhepler.insert_search_results(media_items=media_list,
                                        ident_flag=ident_flag,
                                        title=content)

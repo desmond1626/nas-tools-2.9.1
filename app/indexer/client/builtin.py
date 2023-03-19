@@ -148,6 +148,9 @@ class BuiltinIndexer(_IIndexClient):
         if indexer.language == "en" and StringUtils.is_chinese(search_word):
             log.warn(f"【{self.index_type}】{indexer.name} 无法使用中文名搜索")
             return []
+        if indexer.language == "zh" and not StringUtils.is_chinese(search_word):
+            log.warn(f"【{self.index_type}】{indexer.name} 只能使用中文名搜索")
+            return []
         result_array = []
         try:
             if indexer.parser == "Rarbg":

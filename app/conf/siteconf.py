@@ -547,6 +547,7 @@ class SiteConf:
         },
         'www.boxmp4.com': {
             "proxy": False,
-            "parser": "Boxmp4Spider"
+            "parser": "Boxmp4Spider",
+            "language": "zh"
         }
     }
