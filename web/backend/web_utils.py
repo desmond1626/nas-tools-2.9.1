@@ -45,15 +45,19 @@ class WebUtils:
         获取最新版本号
         """
         try:
-            version_res = RequestUtils(proxies=Config().get_proxies()).get_res(
-                "https://api.github.com/repos/desmond1626/nas-tools-2.9.1/releases/latest")
+            # version_res = RequestUtils(proxies=Config().get_proxies()).get_res(
+            #     "https://api.github.com/repos/desmond1626/nas-tools-2.9.1/releases/latest")
+            version_res = "v2.9.2"
             commit_res = RequestUtils(proxies=Config().get_proxies()).get_res(
-                "https://api.github.com/repos/desmond1626/nas-tools-2.9.1/commits/master")
+                "https://api.github.com/repos/desmond1626/nas-tools-2.9.1/commits/2.9.2")
             if version_res and commit_res:
-                ver_json = version_res.json()
+                # ver_json = version_res.json()
+                # commit_json = commit_res.json()
+                # version = f"{ver_json['tag_name']} {commit_json['sha'][:7]}"
+                # url = ver_json["html_url"]
                 commit_json = commit_res.json()
-                version = f"{ver_json['tag_name']} {commit_json['sha'][:7]}"
-                url = ver_json["html_url"]
+                version = f"{version_res} {commit_json['sha'][:7]}"
+                url = "https://github.com/desmond1626/nas-tools-2.9.1/releases/tag/v2.9.2"
                 return version, url, True
         except Exception as e:
             ExceptionUtils.exception_traceback(e)

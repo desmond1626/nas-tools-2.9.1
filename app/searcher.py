@@ -135,14 +135,19 @@ class Searcher:
                                         match_media=media_info,
                                         in_from=in_from)
         # 使用名称重新搜索
-        if len(media_list) == 0 \
-                and second_search_name \
-                and second_search_name != first_search_name:
-            log.info("【Searcher】%s 未检索到资源,尝试通过 %s 重新检索 ..." % (first_search_name, second_search_name))
-            media_list = self.search_medias(key_word=second_search_name,
-                                            filter_args=filter_args,
-                                            match_media=media_info,
-                                            in_from=in_from)
+        if second_search_name and second_search_name != first_search_name:
+            log.info("【Searcher】开始检索 %s ..." % second_search_name)
+            second_media_list = self.search_medias(key_word=second_search_name,
+                                                   filter_args=filter_args,
+                                                   match_media=media_info,
+                                                   in_from=in_from)
+            if len(second_media_list) != 0:
+                key_list = []
+                for x in media_list:
+                    key_list.append(x.enclosure)
+                for x in second_media_list:
+                    if x.enclosure not in key_list:
+                        media_list.append(x)
 
         if len(media_list) == 0:
             log.info("【Searcher】%s 未搜索到任何资源" % second_search_name)
@@ -152,10 +157,15 @@ class Searcher:
                 # 保存搜索记录
                 self.dbhelper.delete_all_search_torrents()
                 # 搜索结果排序
-                media_list = sorted(media_list, key=lambda x: "%s%s%s%s" % (str(x.title).ljust(100, ' '),
-                                                                            str(x.res_order).rjust(3, '0'),
-                                                                            str(x.site_order).rjust(3, '0'),
-                                                                            str(x.seeders).rjust(10, '0')),
+                media_list = sorted(media_list, key=lambda x: "%s%s%s%s%s%s" % (str(x.title).ljust(100, ' '),
+                                                                                str(x.res_order).rjust(3, '0'),
+                                                                                str(x.site_order).rjust(3, '0'),
+                                                                                str(x.begin_season if x.begin_season else 1).rjust(
+                                                                                    3, '0'),
+                                                                                str(x.begin_episode if x.begin_episode else 1).rjust(
+                                                                                    3, '0'),
+                                                                                str(x.seeders if x.seeders and x.seeders != "-" else 0).rjust(
+                                                                                    10, '0')),
                                     reverse=True)
                 # 插入数据库
                 self.dbhelper.insert_search_results(media_list)

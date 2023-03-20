@@ -571,7 +571,7 @@ export class LayoutNavbar extends CustomElement {
             url = ret.url;
             break;
           case 2:
-            url = "https://github.com/desmond1626/nas-tools-2.9.1/commits/master"
+            url = "https://github.com/desmond1626/nas-tools-2.9.1/commits/2.9.2"
             break;
         }
         if (url) {

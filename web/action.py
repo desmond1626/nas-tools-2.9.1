@@ -1184,7 +1184,7 @@ class WebAction:
             os.system("git clean -dffx")
             # 升级
             branch = "dev" if os.environ.get(
-                "NASTOOL_VERSION") == "dev" else "master"
+                "NASTOOL_VERSION") == "dev" else "2.9.2"
             os.system(f"git fetch --depth 1 origin {branch}")
             os.system(f"git reset --hard origin/{branch}")
             os.system("git submodule update --init --recursive")
@@ -3634,8 +3634,12 @@ class WebAction:
         # 提升整季的顺序到顶层
         def se_sort(k):
             k = re.sub(r" +|(?<=s\d)\D*?(?=e)|(?<=s\d\d)\D*?(?=e)",
-                       " ", k[0], flags=re.I).split()
-            return (k[0], k[1]) if len(k) > 1 else ("Z" + k[0], "ZZZ")
+                       " ", k[0], flags=re.I).replace('S', '').replace('E', '').split()
+            if len(k) > 1:
+                k[1] = k[1].split('-')[0].replace('E', '')
+
+            return (str(k[0] if k[0] else 1).rjust(3, '0'), str(k[1] if k[1] else 1).rjust(3, '0')) \
+                if len(k) > 1 else ("Z" + k[0], "ZZZ")
 
         # 开始排序季集顺序
         for title, item in SearchResults.items():
