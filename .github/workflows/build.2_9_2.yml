@@ -1,4 +1,4 @@
-name: Build NAStool Image
+name: Build NAStool v2.9.2 Image
 on:
   workflow_dispatch:
   push:
@@ -51,4 +51,3 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/nas-tools:2.9.2
-            ${{ secrets.DOCKER_USERNAME }}/nas-tools:${{ env.app_version }}
